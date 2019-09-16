@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const bcrypt = require('bcryptjs')
 const db = require('../models/users-model')
+const restricted = require('../middleware/restricted.js')
 
 router.post('/register', (req, res) => {
     let credentials = req.body
@@ -29,7 +30,7 @@ router.post('/login', (req, res) => {
     .catch( err => res.status(500).json({message: 'hello error'}))
 })
 
-router.get('/', (req, res) => {
+router.get('/', restricted, (req, res) => {
     db.find()
     .then(users => res.status(200).json(users))
     .catch( err => res.status(500).json(err))
