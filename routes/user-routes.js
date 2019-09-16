@@ -15,6 +15,20 @@ router.post('/register', (req, res) => {
 
 })
 
+router.post('/login', (req, res) => {
+    let { username, password } = req.body;
+
+    db.findByUserName(username)
+    .then( user => {
+        if(user && bcrypt.compareSync(password, user.password)){
+            res.status(200).json(user)
+        }else{
+            res.status(401).json({message: 'invalid credentials'})
+        }
+    })
+    .catch( err => res.status(500).json({message: 'hello error'}))
+})
+
 router.get('/', (req, res) => {
     db.find()
     .then(users => res.status(200).json(users))
